@@ -1,5 +1,12 @@
 FROM alpine:latest
 
+LABEL maintainer="Mark Hahl <mhahl@emesis.io>" \
+      org.label-schema.name="Postfix Docke Image" \
+      org.label-schema.description="Docker image for Postfix the free and open-source mail transfer agent." \
+      org.label-schema.url="https://github.com/wolskie/postfix-container" \
+      org.label-schema.vcs-url="https://github.com/wolskie/postfix-container" \
+      org.label-schema.schema-version="1.0"
+
 RUN apk update \
  && apk upgrade \
  && apk add --no-cache \
