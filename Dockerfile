@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM centos:latest
 
 LABEL maintainer="Mark Hahl <mark@hahl.id.au>" \
       org.label-schema.name="Postfix Docker Image" \
@@ -7,16 +7,14 @@ LABEL maintainer="Mark Hahl <mark@hahl.id.au>" \
       org.label-schema.vcs-url="https://github.com/wolskie/postfix-container" \
       org.label-schema.schema-version="1.0"
 
-RUN apk update \
- && apk upgrade \
- && apk add --no-cache \
-        ca-certificates \
- && update-ca-certificates \
- 
- # Install postfix
- && apk add --no-cache \
-    postfix postfix-pcre rsyslog cyrus-sasl cyrus-sasl-login tzdata supervisor \
- && (rm "/tmp/"* 2>/dev/null || true) && (rm -rf /var/cache/apk/* 2>/dev/null || true)
+# Update system
+RUN dnf install -y epel-release -y && \
+    dnf upgrade -y && \
+    dnf clean all && \
+    rm -rf /var/cache/yum
+	
+# Install tools
+RUN dnf install -y wget supervisor rsyslog postfix && dnf clean all
 
 COPY supervisord.conf /etc/supervisord.conf
 COPY rsyslog.conf /etc/rsyslog.conf
