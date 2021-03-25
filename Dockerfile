@@ -16,8 +16,12 @@ RUN dnf install -y epel-release -y && \
 # Install tools
 RUN dnf install -y wget supervisor rsyslog postfix && dnf clean all
 
+# Add Files
+COPY supervisord.conf /etc/supervisord.conf
+COPY rsyslog.conf /etc/rsyslog.conf
+
 EXPOSE 25
 EXPOSE 587
 
-CMD ["/usr/sbin/postfix", "-c", "/etc/postfix start"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
 
